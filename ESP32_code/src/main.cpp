@@ -187,25 +187,11 @@ i2s_pin_config_t i2sPins = {
 
 // how many samples to read at once
 const int SAMPLE_SIZE = 16384/4; 
-
-// send data to a remote address
-void sendData(WiFiClient *wifiClient, HTTPClient *httpClient, const char *url, uint8_t *bytes, size_t count)
-{
-  // send them off to the server
-  digitalWrite(ledBPin, HIGH);
-  httpClient->begin(*wifiClient, url);
-  httpClient->addHeader("content-type", "application/octet-stream");
-  httpClient->POST(bytes, count);
-  httpClient->end();
-  digitalWrite(ledBPin, LOW);
-}
-
 int16_t *samples = (int16_t *)malloc(sizeof(uint16_t) * SAMPLE_SIZE);
 int samples_read;
 
 // Semaphore to lock access to samples
 SemaphoreHandle_t samplesSemaphore;
-
 TaskHandle_t sendData1TaskHandle = NULL;
 
 // send data to a remote address
